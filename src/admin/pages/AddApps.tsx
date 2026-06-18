@@ -1,131 +1,364 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { FaCloudUploadAlt } from "react-icons/fa";
 import api from "../../services/api";
 
 export default function AddApp() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
 
-  const [form, setForm] = useState({
-    title: "",
-    description: "",
-    category: "",
-    url: "",
-    featured: false,
-  });
+  const [loading, setLoading] =
+    useState(false);
 
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] =
+    useState<File | null>(null);
 
-  const submit = async (e: React.FormEvent) => {
+  const [preview, setPreview] =
+    useState("");
+
+  const [form, setForm] =
+    useState({
+      title: "",
+      description: "",
+      category: "",
+      url: "",
+      featured: false,
+    });
+
+  const handleImage =
+    (
+      e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+      const file =
+        e.target.files?.[0];
+
+      if (!file) return;
+
+      setImage(file);
+
+      setPreview(
+        URL.createObjectURL(file)
+      );
+    };
+
+  const submit = async (
+    e: React.FormEvent
+  ) => {
     e.preventDefault();
 
-    if (!image) return toast.error("Please select an image");
+    if (!image) {
+      return toast.error(
+        "Please select an image"
+      );
+    }
 
     try {
       setLoading(true);
 
-      const data = new FormData();
-      Object.entries(form).forEach(([key, value]) => {
-        data.append(key, String(value));
-      });
+      const data =
+        new FormData();
 
-      data.append("image", image);
+      Object.entries(form).forEach(
+        ([key, value]) => {
+          data.append(
+            key,
+            String(value)
+          );
+        }
+      );
 
-      await api.post("/apps", data);
+      data.append(
+        "image",
+        image
+      );
 
-      toast.success("App created successfully");
-      navigate("/admin/apps");
+      await api.post(
+        "/apps",
+        data
+      );
+
+      toast.success(
+        "App created successfully"
+      );
+
+      navigate(
+        "/admin/apps"
+      );
     } catch (error) {
       console.log(error);
-      toast.error("Failed to create app");
+
+      toast.error(
+        "Failed to create app"
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-6 sm:mb-10">
-          Add App
+    <div
+      className="
+      max-w-4xl
+      mx-auto
+      px-4
+      py-6
+    "
+    >
+      <div
+        className="
+        bg-[#111827]
+        rounded-3xl
+        border
+        border-white/10
+        p-6
+        md:p-8
+      "
+      >
+        <h1
+          className="
+          text-3xl
+          md:text-4xl
+          font-black
+          mb-8
+        "
+        >
+          Add New App
         </h1>
 
         <form
           onSubmit={submit}
-          className="space-y-5 sm:space-y-6"
+          className="
+          space-y-6
+        "
         >
           <input
-            placeholder="Title"
+            placeholder="App Title"
             value={form.title}
             onChange={(e) =>
-              setForm({ ...form, title: e.target.value })
+              setForm({
+                ...form,
+                title:
+                  e.target.value,
+              })
             }
-            className="w-full p-3 sm:p-4 rounded-xl bg-card outline-none"
+            className="
+              w-full
+              p-4
+              rounded-xl
+              bg-black/20
+              border
+              border-white/10
+              outline-none
+            "
           />
 
           <textarea
-            placeholder="Description"
-            value={form.description}
-            onChange={(e) =>
-              setForm({ ...form, description: e.target.value })
-            }
             rows={5}
-            className="w-full p-3 sm:p-4 rounded-xl bg-card outline-none"
+            placeholder="Description"
+            value={
+              form.description
+            }
+            onChange={(e) =>
+              setForm({
+                ...form,
+                description:
+                  e.target.value,
+              })
+            }
+            className="
+              w-full
+              p-4
+              rounded-xl
+              bg-black/20
+              border
+              border-white/10
+              outline-none
+            "
           />
 
-          {/* Responsive grid for better layout on larger screens */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <input
-              placeholder="Category"
-              value={form.category}
-              onChange={(e) =>
-                setForm({ ...form, category: e.target.value })
+          <div
+            className="
+            grid
+            md:grid-cols-2
+            gap-4
+          "
+          >
+            <select
+              value={
+                form.category
               }
-              className="w-full p-3 sm:p-4 rounded-xl bg-card outline-none"
-            />
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  category:
+                    e.target.value,
+                })
+              }
+              className="
+                p-4
+                rounded-xl
+                bg-black/20
+                border
+                border-white/10
+              "
+            >
+              <option value="">
+                Select Category
+              </option>
+
+              <option>
+                Productivity
+              </option>
+
+              <option>
+                Education
+              </option>
+
+              <option>
+                E-commerce
+              </option>
+
+              <option>
+                Finance
+              </option>
+
+              <option>
+                Healthcare
+              </option>
+
+              <option>
+                Social
+              </option>
+            </select>
 
             <input
               placeholder="App URL"
               value={form.url}
               onChange={(e) =>
-                setForm({ ...form, url: e.target.value })
+                setForm({
+                  ...form,
+                  url:
+                    e.target.value,
+                })
               }
-              className="w-full p-3 sm:p-4 rounded-xl bg-card outline-none"
+              className="
+                p-4
+                rounded-xl
+                bg-black/20
+                border
+                border-white/10
+              "
             />
           </div>
 
-          {/* File input */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm text-gray-400">
-              Upload App Image
+          <div>
+            <label
+              className="
+              block
+              mb-3
+              font-medium
+            "
+            >
+              App Image
             </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) =>
-                setImage(e.target.files?.[0] || null)
-              }
-              className="w-full text-sm"
-            />
+
+            <label
+              className="
+              border-2
+              border-dashed
+              border-white/20
+              rounded-2xl
+              p-8
+              flex
+              flex-col
+              items-center
+              justify-center
+              cursor-pointer
+            "
+            >
+              <FaCloudUploadAlt
+                size={40}
+                className="
+                text-green-500
+                mb-4
+              "
+              />
+
+              <span>
+                Click to upload
+              </span>
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={
+                  handleImage
+                }
+                className="hidden"
+              />
+            </label>
+
+            {preview && (
+              <img
+                src={preview}
+                alt="preview"
+                className="
+                  mt-5
+                  h-48
+                  rounded-2xl
+                  object-cover
+                "
+              />
+            )}
           </div>
 
-          <label className="flex items-center gap-3 text-sm sm:text-base">
+          <div
+            className="
+            flex
+            items-center
+            gap-4
+          "
+          >
             <input
               type="checkbox"
-              checked={form.featured}
-              onChange={(e) =>
-                setForm({ ...form, featured: e.target.checked })
+              checked={
+                form.featured
               }
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  featured:
+                    e.target.checked,
+                })
+              }
+              className="
+              w-5
+              h-5
+            "
             />
-            Featured App
-          </label>
+
+            <span>
+              Featured App
+            </span>
+          </div>
 
           <button
             disabled={loading}
-            className="w-full sm:w-auto bg-green-500 hover:bg-green-600 transition px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold"
+            className="
+              w-full
+              md:w-auto
+              bg-green-500
+              hover:bg-green-600
+              transition
+              px-8
+              py-4
+              rounded-xl
+              font-bold
+            "
           >
-            {loading ? "Creating..." : "Create App"}
+            {loading
+              ? "Creating..."
+              : "Create App"}
           </button>
         </form>
       </div>

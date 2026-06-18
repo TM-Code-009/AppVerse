@@ -19,6 +19,7 @@ export default function MobileMenu({
         z-[999]
         bg-black/90
         backdrop-blur-xl
+        text-white
       "
     >
       <div

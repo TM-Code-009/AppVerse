@@ -57,7 +57,7 @@ export default function HireMe() {
 
   return (
     <SectionReveal>
-      <section className="py-24 px-6">
+      <section id="contact" className="py-24 px-6">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-black mb-8 text-primary">
             Hire Me

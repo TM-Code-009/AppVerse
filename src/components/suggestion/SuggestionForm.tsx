@@ -1,8 +1,8 @@
 import { useState } from "react";
-import emailjs from "@emailjs/browser";
+import toast from "react-hot-toast";
 
-import { EMAILJS_CONFIG } from "../../utils/emailjs";
 import SectionReveal from "../ui/SectionReveal";
+import api from "../../services/api";
 
 export default function SuggestionForm() {
   const [loading, setLoading] =
@@ -12,8 +12,7 @@ export default function SuggestionForm() {
     useState({
       name: "",
       email: "",
-      app: "",
-      reason: "",
+      suggestion: "",
     });
 
   const handleSubmit = async (
@@ -21,133 +20,148 @@ export default function SuggestionForm() {
   ) => {
     e.preventDefault();
 
-    setLoading(true);
-
     try {
-      await emailjs.send(
-        EMAILJS_CONFIG.SERVICE_ID,
-        EMAILJS_CONFIG.SUGGESTION_TEMPLATE,
-        form,
-        EMAILJS_CONFIG.PUBLIC_KEY
+      setLoading(true);
+
+      await api.post(
+        "/suggestions",
+        form
       );
 
-      alert(
-        "Suggestion submitted!"
+      toast.success(
+        "Suggestion submitted successfully!"
       );
 
       setForm({
         name: "",
         email: "",
-        app: "",
-        reason: "",
+        suggestion: "",
       });
     } catch (error) {
       console.log(error);
-    }
 
-    setLoading(false);
+      toast.error(
+        "Failed to submit suggestion"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <SectionReveal>
-  
-    <section
-      className="
-      py-24
-      px-6
-    "
-    >
-      <div
+      <section
         className="
-        max-w-3xl
-        mx-auto
+        py-24
+        px-6
       "
       >
-        <h2
+        <div
           className="
-          text-4xl
-          font-black
-          mb-8
+          max-w-3xl
+          mx-auto
         "
         >
-          Suggest An App
-        </h2>
-
-        <form
-          onSubmit={
-            handleSubmit
-          }
-          className="
-          space-y-4
-        "
-        >
-          <input
-            placeholder="Name"
-            value={form.name}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                name: e.target.value,
-              })
-            }
-            className="w-full p-4 rounded-xl bg-[#111827]"
-          />
-
-          <input
-            placeholder="Email"
-            value={form.email}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                email:
-                  e.target.value,
-              })
-            }
-            className="w-full p-4 rounded-xl bg-[#111827]"
-          />
-
-          <input
-            placeholder="Suggested App"
-            value={form.app}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                app: e.target.value,
-              })
-            }
-            className="w-full p-4 rounded-xl bg-[#111827]"
-          />
-
-          <textarea
-            rows={5}
-            placeholder="Reason"
-            value={form.reason}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                reason:
-                  e.target.value,
-              })
-            }
-            className="w-full p-4 rounded-xl bg-[#111827]"
-          />
-
-          <button
-            disabled={loading}
+          <h2
             className="
-            bg-green-500
-            px-8
-            py-4
-            rounded-xl
+            text-4xl
+            font-black
+            mb-8
           "
           >
-            {loading
-              ? "Sending..."
-              : "Submit Suggestion"}
-          </button>
-        </form>
-      </div>
-    </section>
-</SectionReveal>
+            Suggest An App
+          </h2>
+
+          <form
+            onSubmit={
+              handleSubmit
+            }
+            className="
+            space-y-4
+          "
+          >
+            <input
+              placeholder="Your Name"
+              value={form.name}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  name:
+                    e.target.value,
+                })
+              }
+              className="
+              w-full
+              p-4
+              rounded-xl
+              bg-[#111827]
+            "
+              required
+            />
+
+            <input
+              type="email"
+              placeholder="Your Email"
+              value={form.email}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  email:
+                    e.target.value,
+                })
+              }
+              className="
+              w-full
+              p-4
+              rounded-xl
+              bg-[#111827]
+            "
+              required
+            />
+
+            <textarea
+              rows={6}
+              placeholder="Tell me the app you would like to see added..."
+              value={
+                form.suggestion
+              }
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  suggestion:
+                    e.target.value,
+                })
+              }
+              className="
+              w-full
+              p-4
+              rounded-xl
+              bg-[#111827]
+            "
+              required
+            />
+
+            <button
+              disabled={
+                loading
+              }
+              className="
+              bg-green-500
+              hover:bg-green-600
+              transition
+              px-8
+              py-4
+              rounded-xl
+              font-semibold
+            "
+            >
+              {loading
+                ? "Submitting..."
+                : "Submit Suggestion"}
+            </button>
+          </form>
+        </div>
+      </section>
+    </SectionReveal>
   );
 }

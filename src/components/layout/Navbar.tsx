@@ -102,7 +102,7 @@ export default function Navbar() {
             <ThemeToggle />
 
             <button
-              className="md:hidden"
+              className="md:hidden bg-black text-white "
               onClick={() =>
                 setOpen(true)
               }

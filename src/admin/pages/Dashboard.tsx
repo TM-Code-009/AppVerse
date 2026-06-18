@@ -3,63 +3,105 @@ import {
   useState,
 } from "react";
 
+import {
+  FaRocket,
+  FaStar,
+  FaBriefcase,
+  FaLightbulb,
+  FaChartLine,
+} from "react-icons/fa";
+
 import StatCard from "../components/StatsCard";
 
 import {
   getStats,
 } from "../../services/dashboard.service";
 
+import {
+  getActivities,
+} from "../../services/activity.service";
+
 export default function Dashboard() {
   const [stats,
     setStats] =
-    useState<any>(
-      null
-    );
+    useState<any>(null);
+
+  const [activities,
+    setActivities] =
+    useState<any[]>([]);
 
   useEffect(() => {
-    loadStats();
+    loadData();
   }, []);
 
-  const loadStats =
+  const loadData =
     async () => {
-      const data =
-        await getStats();
+      try {
+        const statsData =
+          await getStats();
 
-      setStats(data);
+        const activityData =
+          await getActivities();
+
+        setStats(
+          statsData
+        );
+
+        setActivities(
+          activityData
+        );
+      } catch (error) {
+        console.log(error);
+      }
     };
 
-  if (!stats)
+  if (!stats) {
     return (
-      <p>
-        Loading...
-      </p>
+      <div className="p-8">
+        Loading Dashboard...
+      </div>
     );
+  }
 
   return (
-    <div>
-      <h1
-        className="
-          text-4xl
+    <div className="space-y-8">
+      <div>
+        <h1
+          className="
+          text-3xl
+          md:text-4xl
           font-black
-          mb-8
         "
-      >
-        Dashboard
-      </h1>
+        >
+          Dashboard
+        </h1>
+
+        <p
+          className="
+          text-gray-400
+          mt-2
+        "
+        >
+          Welcome back to
+          AppVerse CMS
+        </p>
+      </div>
 
       <div
         className="
-          grid
-          md:grid-cols-2
-          xl:grid-cols-5
-          gap-6
-        "
+        grid
+        grid-cols-1
+        sm:grid-cols-2
+        xl:grid-cols-5
+        gap-5
+      "
       >
         <StatCard
           title="Apps"
           value={
             stats.totalApps
           }
+          icon={<FaRocket />}
         />
 
         <StatCard
@@ -67,12 +109,16 @@ export default function Dashboard() {
           value={
             stats.featuredApps
           }
+          icon={<FaStar />}
         />
 
         <StatCard
           title="Hire Requests"
           value={
             stats.hires
+          }
+          icon={
+            <FaBriefcase />
           }
         />
 
@@ -81,6 +127,9 @@ export default function Dashboard() {
           value={
             stats.suggestions
           }
+          icon={
+            <FaLightbulb />
+          }
         />
 
         <StatCard
@@ -88,7 +137,160 @@ export default function Dashboard() {
           value={
             stats.activities
           }
+          icon={
+            <FaChartLine />
+          }
         />
+      </div>
+
+      <div
+        className="
+        grid
+        lg:grid-cols-3
+        gap-6
+      "
+      >
+        <div
+          className="
+          lg:col-span-2
+          bg-[#111827]
+          border
+          border-white/10
+          rounded-3xl
+          p-6
+        "
+        >
+          <h2
+            className="
+            text-2xl
+            font-bold
+            mb-6
+          "
+          >
+            Recent Activities
+          </h2>
+
+          <div className="space-y-4">
+            {activities
+              .slice(0, 10)
+              .map(
+                (
+                  activity
+                ) => (
+                  <div
+                    key={
+                      activity._id
+                    }
+                    className="
+                    p-4
+                    rounded-xl
+                    bg-black/20
+                    border
+                    border-white/5
+                  "
+                  >
+                    <p>
+                      {
+                        activity.message
+                      }
+                    </p>
+
+                    <span
+                      className="
+                      text-xs
+                      text-gray-400
+                    "
+                    >
+                      {new Date(
+                        activity.createdAt
+                      ).toLocaleString()}
+                    </span>
+                  </div>
+                )
+              )}
+          </div>
+        </div>
+
+        <div
+          className="
+          bg-[#111827]
+          border
+          border-white/10
+          rounded-3xl
+          p-6
+        "
+        >
+          <h2
+            className="
+            text-2xl
+            font-bold
+            mb-6
+          "
+          >
+            Quick Actions
+          </h2>
+
+          <div className="space-y-4">
+            <a
+              href="/admin/add-app"
+              className="
+              block
+              p-4
+              rounded-xl
+              bg-green-500
+              text-center
+              font-semibold
+            "
+            >
+              Add New App
+            </a>
+
+            <a
+              href="/admin/apps"
+              className="
+              block
+              p-4
+              rounded-xl
+              bg-black/20
+              border
+              border-white/10
+              text-center
+            "
+            >
+              Manage Apps
+            </a>
+
+            <a
+              href="/admin/hire"
+              className="
+              block
+              p-4
+              rounded-xl
+              bg-black/20
+              border
+              border-white/10
+              text-center
+            "
+            >
+              View Hire Requests
+            </a>
+
+            <a
+              href="/admin/suggestions"
+              className="
+              block
+              p-4
+              rounded-xl
+              bg-black/20
+              border
+              border-white/10
+              text-center
+            "
+            >
+              View Suggestions
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );

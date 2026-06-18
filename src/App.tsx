@@ -21,6 +21,11 @@ import AdminLayout from "./admin/layout/AdminLayout";
 import Apps from "./admin/pages/Apps";
 import AddApp from "./admin/pages/AddApps";
 import EditApp from "./admin/pages/EditApps";
+import Activities
+from "./admin/pages/Activities";
+import Suggestions
+from "./admin/pages/Suggestions";
+import HireRequests from "./admin/pages/HireRequest";
 
 function App() {
   const { darkMode } =
@@ -65,6 +70,18 @@ function App() {
     <Route path="apps" element={<Apps />} />
     <Route path="add-app" element={<AddApp />} />
     <Route path="edit-app/:id" element={<EditApp />} />
+    <Route path="activity" element={<Activities />}/>
+  <Route
+  path="suggestions"
+  element={<Suggestions/>}
+/>
+
+<Route
+  path="hire"
+  element={<HireRequests />}
+/>
+
+
   </Route>
         </Route>
       </Routes>

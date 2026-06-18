@@ -1,6 +1,7 @@
 interface Props {
   title: string;
   value: number;
+  icon?: React.ReactNode;
 }
 
 export default function StatCard({
