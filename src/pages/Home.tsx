@@ -8,7 +8,7 @@ import WhyChooseMe from "../components/whyChooseme/WhyChooseMe";
 
 import SuggestionForm from "../components/suggestion/SuggestionForm";
 import HireMe from "../components/hire/HireMe";
-import ContactForm from "../components/contact/ContactForm";
+// import ContactForm from "../components/contact/ContactForm";
 
 import Testimonials from "../components/testimonials/Testimonials";
 import Newsletter from "../components/newsletter/NewsLetter";
@@ -34,7 +34,7 @@ export default function Home() {
 
       <HireMe />
 
-      <ContactForm />
+      {/* <ContactForm /> */}
 
       <Testimonials />
 
