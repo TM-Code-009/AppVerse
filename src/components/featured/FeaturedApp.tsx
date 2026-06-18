@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export default function FeaturedApp() {
   return (
@@ -51,7 +52,7 @@ export default function FeaturedApp() {
               font-black
             "
           >
-            NYSC Connect
+            Green<span className="text-[#00E676]">Link</span>
           </h2>
 
           <p
@@ -69,6 +70,7 @@ export default function FeaturedApp() {
             opportunity sharing.
           </p>
 
+          <Link to={"https://green-linkio.web.app/"} >
           <button
             className="
               mt-8
@@ -76,10 +78,12 @@ export default function FeaturedApp() {
               px-8
               py-4
               rounded-xl
+              text-white
             "
           >
             Visit App
           </button>
+          </Link>
         </motion.div>
       </div>
     </section>
