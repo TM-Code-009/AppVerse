@@ -1,14 +1,35 @@
-import { useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import AppCard from "./AppCard";
 import SearchBar from "./SearchBar";
 import Categories from "./Cartegories";
 
-import { apps } from "../../data/app";
-import { categories } from "../../data/cartegories";
+import {
+  getApps,
+} from "../../services/app.service";
+
+interface App {
+  _id: string;
+  title: string;
+  image: string;
+  description: string;
+  category: string;
+  url: string;
+}
 
 export default function AppGrid() {
-  const [search, setSearch] =
+  const [apps, setApps] =
+    useState<App[]>([]);
+
+  const [loading,
+    setLoading] =
+    useState(true);
+
+  const [search,
+    setSearch] =
     useState("");
 
   const [
@@ -16,8 +37,39 @@ export default function AppGrid() {
     setSelectedCategory,
   ] = useState("All");
 
+  useEffect(() => {
+    loadApps();
+  }, []);
+
+  const loadApps =
+    async () => {
+      try {
+        const data =
+          await getApps();
+
+        setApps(data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+  const categories =
+    [
+      "All",
+
+      ...new Set(
+        apps.map(
+          (app) =>
+            app.category
+        )
+      ),
+    ];
+
   const filteredApps =
     apps.filter((app) => {
+
       const matchesSearch =
         app.title
           .toLowerCase()
@@ -28,6 +80,7 @@ export default function AppGrid() {
       const matchesCategory =
         selectedCategory ===
           "All" ||
+
         app.category ===
           selectedCategory;
 
@@ -37,6 +90,19 @@ export default function AppGrid() {
       );
     });
 
+  if (loading) {
+    return (
+      <section
+        className="
+          py-24
+          text-center
+        "
+      >
+        Loading apps...
+      </section>
+    );
+  }
+
   return (
     <section
       id="apps"
@@ -45,7 +111,12 @@ export default function AppGrid() {
         px-6
       "
     >
-      <div className="max-w-7xl mx-auto">
+      <div
+        className="
+          max-w-7xl
+          mx-auto
+        "
+      >
         <h2
           className="
             text-4xl
@@ -78,15 +149,17 @@ export default function AppGrid() {
           className="
             grid
             grid-cols-1
-sm:grid-cols-2
-xl:grid-cols-3
+            sm:grid-cols-2
+            xl:grid-cols-3
             gap-8
           "
         >
           {filteredApps.map(
             (app) => (
               <AppCard
-                key={app.id}
+                key={
+                  app._id
+                }
                 {...app}
               />
             )

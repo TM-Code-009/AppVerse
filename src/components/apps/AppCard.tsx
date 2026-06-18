@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
+import { incrementClick }
+from "../../services/app.service";
+
 interface Props {
+  _id: string;
   title: string;
   image: string;
   description: string;
@@ -10,12 +14,30 @@ interface Props {
 }
 
 export default function AppCard({
+  _id,
   title,
   image,
   description,
   category,
   url,
 }: Props) {
+
+  const handleVisit =
+    async () => {
+      try {
+        await incrementClick(
+          _id
+        );
+      } catch (error) {
+        console.log(error);
+      }
+
+      window.open(
+        url,
+        "_blank"
+      );
+    };
+
   return (
     <motion.div
       whileHover={{
@@ -70,10 +92,10 @@ export default function AppCard({
           {description}
         </p>
 
-        <a
-          href={url}
-          target="_blank"
-          rel="noreferrer"
+        <button
+          onClick={
+            handleVisit
+          }
           className="
             mt-4
             inline-flex
@@ -83,8 +105,9 @@ export default function AppCard({
           "
         >
           Visit App
+
           <FaExternalLinkAlt />
-        </a>
+        </button>
       </div>
     </motion.div>
   );
