@@ -1,8 +1,12 @@
 import { motion } from "framer-motion";
-import { FaExternalLinkAlt } from "react-icons/fa";
+import {
+  FaExternalLinkAlt,
+  FaEye,
+} from "react-icons/fa";
 
-import { incrementClick }
-from "../../services/app.service";
+import {
+  incrementClick,
+} from "../../services/app.service";
 
 interface Props {
   _id: string;
@@ -11,6 +15,7 @@ interface Props {
   description: string;
   category: string;
   url: string;
+  price: number;
 }
 
 export default function AppCard({
@@ -20,8 +25,8 @@ export default function AppCard({
   description,
   category,
   url,
+  price,
 }: Props) {
-
   const handleVisit =
     async () => {
       try {
@@ -38,11 +43,20 @@ export default function AppCard({
       );
     };
 
+  const handleView =
+    () => {
+      window.location.href =
+        `/app/${_id}`;
+    };
+
   return (
     <motion.div
       whileHover={{
-        y: -10,
-        scale: 1.03,
+        y: -8,
+        scale: 1.02,
+      }}
+      transition={{
+        duration: 0.2,
       }}
       className="
         bg-card
@@ -50,6 +64,9 @@ export default function AppCard({
         overflow-hidden
         border
         border-theme
+        h-full
+        flex
+        flex-col
       "
     >
       <img
@@ -62,52 +79,139 @@ export default function AppCard({
         "
       />
 
-      <div className="p-6">
-        <span
+      <div
+        className="
+          p-6
+          flex
+          flex-col
+          flex-1
+        "
+      >
+        {/* Top Info */}
+        <div
           className="
-            text-green-500
-            text-sm
+            flex
+            justify-between
+            items-center
+            gap-3
           "
         >
-          {category}
-        </span>
+          <span
+            className="
+              text-green-500
+              text-sm
+              font-semibold
+            "
+          >
+            {category}
+          </span>
 
+          <span
+            className="
+              bg-green-500/10
+              text-green-400
+              px-3
+              py-1
+              rounded-full
+              text-sm
+              font-bold
+            "
+          >
+            ₦
+            {price?.toLocaleString()}
+          </span>
+        </div>
+
+        {/* Title */}
         <h3
           className="
             text-2xl
             font-bold
-            mt-3
+            mt-4
             text-primary
           "
         >
           {title}
         </h3>
 
+        {/* Description */}
         <p
           className="
             mt-3
             text-muted
+            flex-1
           "
         >
           {description}
         </p>
 
-        <button
-          onClick={
-            handleVisit
-          }
+        {/* Buttons */}
+        <div
           className="
-            mt-4
-            inline-flex
-            items-center
-            gap-2
-            text-green-500
+            mt-6
+            flex
+            gap-3
           "
         >
-          Visit App
+          <button
+            onClick={
+              handleView
+            }
+            className="
+              flex-1
+              flex
+              items-center
+              justify-center
+              gap-2
 
-          <FaExternalLinkAlt />
-        </button>
+              border
+              border-green-500
+
+              text-green-500
+
+              py-3
+              rounded-xl
+
+              hover:bg-green-500
+              hover:text-white
+
+              transition
+            "
+          >
+            <FaEye />
+
+            Request App
+          </button>
+
+          <button
+            onClick={
+              handleVisit
+            }
+            className="
+              flex-1
+              flex
+              items-center
+              justify-center
+              gap-2
+
+              bg-green-500
+              hover:bg-green-600
+
+              text-white
+
+              py-3
+              rounded-xl
+
+              font-semibold
+
+              transition
+            "
+          >
+            <FaExternalLinkAlt />
+
+            View App
+          </button>
+        </div>
       </div>
     </motion.div>
   );

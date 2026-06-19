@@ -26,6 +26,8 @@ from "./admin/pages/Activities";
 import Suggestions
 from "./admin/pages/Suggestions";
 import HireRequests from "./admin/pages/HireRequest";
+import Requests from "./admin/pages/Request";
+import AppDetails from "./components/apps/AppDetails";
 
 function App() {
   const { darkMode } =
@@ -57,6 +59,11 @@ function App() {
           }
         />
 
+        <Route
+  path="/app/:id"
+  element={<AppDetails />}
+/>
+
         {/* Admin Login */}
         <Route
           path="/admin/login"
@@ -79,6 +86,11 @@ function App() {
 <Route
   path="hire"
   element={<HireRequests />}
+/>
+
+<Route
+  path="requests"
+  element={<Requests />}
 />
 
 

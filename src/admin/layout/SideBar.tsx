@@ -5,6 +5,7 @@ import {
   FaLightbulb,
   FaBriefcase,
   FaHistory,
+  FaClipboardList,
   FaTimes,
 } from "react-icons/fa";
 
@@ -53,6 +54,11 @@ export default function Sidebar({
       icon: <FaBriefcase />,
     },
     {
+      name: "App Requests",
+      path: "/admin/requests",
+      icon: <FaClipboardList />,
+    },
+    {
       name: "Activities",
       path:
         "/admin/activity",
@@ -62,8 +68,6 @@ export default function Sidebar({
 
   return (
     <>
-      {/* Mobile Overlay */}
-
       {open && (
         <div
           onClick={close}
@@ -85,22 +89,17 @@ export default function Sidebar({
           h-screen
           w-72
           z-50
-
           bg-[#111827]/95
           backdrop-blur-xl
-
           border-r
           border-white/10
-
           transition-transform
           duration-300
-
           ${
             open
               ? "translate-x-0"
               : "-translate-x-full"
           }
-
           lg:translate-x-0
         `}
       >
@@ -161,27 +160,17 @@ export default function Sidebar({
 
               return (
                 <Link
-                  key={
-                    link.path
-                  }
-                  to={
-                    link.path
-                  }
-                  onClick={
-                    close
-                  }
+                  key={link.path}
+                  to={link.path}
+                  onClick={close}
                   className={`
                     flex
                     items-center
                     gap-3
-
                     px-4
                     py-3
-
                     rounded-xl
-
                     transition-all
-
                     ${
                       active
                         ? `
@@ -196,7 +185,6 @@ export default function Sidebar({
                   `}
                 >
                   {link.icon}
-
                   {link.name}
                 </Link>
               );
