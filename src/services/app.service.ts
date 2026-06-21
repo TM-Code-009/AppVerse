@@ -50,3 +50,13 @@ export const updateApp =
 
     return res.data;
   };
+
+  export const getFeaturedApps =
+  async () => {
+    const res =
+      await api.get(
+        "/apps/featured"
+      );
+
+    return res.data.data;
+  };

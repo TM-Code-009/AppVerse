@@ -1,6 +1,6 @@
 import Hero from "../components/hero/Hero";
 import FeaturedApp from "../components/featured/FeaturedApp";
-import AppGrid from "../components/apps/AppGrid";
+// import AppGrid from "../components/apps/AppGrid";
 
 import About from "../components/about/About";
 import Services from "../components/services/Services";
@@ -14,6 +14,7 @@ import Testimonials from "../components/testimonials/Testimonials";
 import Newsletter from "../components/newsletter/NewsLetter";
 
 import Footer from "../components/layout/Footer";
+import FeaturedApps from "../components/apps/FeaturedApps";
 
 export default function Home() {
   return (
@@ -22,7 +23,9 @@ export default function Home() {
 
       <FeaturedApp />
 
-      <AppGrid />
+      <FeaturedApps />
+
+      {/* <AppGrid /> */}
 
       <About />
 

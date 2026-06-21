@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import ProtectedRoute from "./routes/ProductedRoute";
 import {
   BrowserRouter,
   Routes,
@@ -28,6 +27,11 @@ from "./admin/pages/Suggestions";
 import HireRequests from "./admin/pages/HireRequest";
 import Requests from "./admin/pages/Request";
 import AppDetails from "./components/apps/AppDetails";
+import AppsPage from "./components/apps/AppsPage";
+import DeveloperProfile from "./pages/DeveloperProfile";
+import AdminProtectedRoute from "./routes/AdminProtectedRoute";
+import Logins from "./pages/Logins";
+import Register from "./pages/Register";
 
 function App() {
   const { darkMode } =
@@ -69,13 +73,33 @@ function App() {
   element={<AppDetails />}
 />
 
+<Route
+  path="/apps"
+  element={<AppsPage />}
+/>
+
+<Route
+  path="/developer/:id"
+  element={<DeveloperProfile />}
+/>
+
         {/* Admin Login */}
         <Route
           path="/admin/login"
           element={<Login />}
         />
 
-        <Route element={<ProtectedRoute />}>
+        <Route
+  path="/login"
+  element={<Logins />}
+/>
+
+<Route
+  path="/register"
+  element={<Register />}
+/>
+
+        <Route element={<AdminProtectedRoute />}>
   <Route path="/admin" element={<AdminLayout />}>
     <Route index element={<Dashboard />} />
 
@@ -101,6 +125,36 @@ function App() {
 
   </Route>
         </Route>
+
+        {/* <Route
+  element={
+    <UserProtectedRoute />
+  }
+>
+  <Route
+    path="/dashboard"
+    element={
+      <DeveloperDashboard />
+    }
+  />
+
+  <Route
+    path="/my-apps"
+    element={<MyApps />}
+  />
+
+  <Route
+    path="/saved-apps"
+    element={<SavedApps />}
+  />
+
+  <Route
+    path="/settings"
+    element={<ProfileSettings />}
+  />
+        </Route> */}
+
+
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface AuthStore {
+interface AdminAuthStore {
   token: string | null;
 
   setToken: (
@@ -10,19 +10,19 @@ interface AuthStore {
   logout: () => void;
 }
 
-export const useAuthStore =
-  create<AuthStore>(
+export const useAdminAuthStore =
+  create<AdminAuthStore>(
     (set) => ({
       token:
         localStorage.getItem(
-          "token"
+          "adminToken"
         ),
 
       setToken: (
         token
       ) => {
         localStorage.setItem(
-          "token",
+          "adminToken",
           token
         );
 
@@ -33,7 +33,7 @@ export const useAuthStore =
 
       logout: () => {
         localStorage.removeItem(
-          "token"
+          "adminToken"
         );
 
         set({
